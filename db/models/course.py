@@ -5,6 +5,8 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 
 from .base import Base
+from .review_stat import ReviewStat
+from .review import Review
 
 class Course(Base):
     __tablename__ = 'course'
@@ -23,5 +25,4 @@ class Course(Base):
     prerequisite: Mapped[Optional[str]] = mapped_column(String(100))
     syllabus: Mapped[Optional[str]] = mapped_column(String(1000))
     reviews: Mapped[List["Review"]] = relationship("Review", back_populates="course", cascade="all, delete-orphan")
-
-    
+    review_stat: Mapped["ReviewStat"] = relationship(back_populates="course")

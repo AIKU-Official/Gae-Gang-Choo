@@ -7,12 +7,15 @@ from bs4 import BeautifulSoup
 import time
 import requests
 
+from typing import List
+
 from db.db_manager import DBMananger
 from db.models.course import Course
 
 class Crawler:
-    def __init__(self, course_page_path: str):
+    def __init__(self, course_page_path: str, db_path: str):
         self.course_page_path = course_page_path
+        self.db_path = db_path
 
     def crawl(self):
         if not self.course_page_path:
@@ -72,6 +75,7 @@ class Crawler:
 
         rows = soup.find_all('tr')
         
+        courses: List[Course] = []
         for row in rows:
             cols = row.find_all('td')
             idx = [1,2,3,4,5,6,7,8]
@@ -101,8 +105,10 @@ class Crawler:
 
             course_info = self.load_details(course_info)
             course = Course(**course_info)
-            db = DBMananger("course.db")
-            db.create_course(course)
+            db = DBMananger(self.db_path, init_db=True)
+
+            courses.append(course)
+        db.create_courses(courses)
 
     def load_details(self, course_info: dict) -> dict:
         """
@@ -152,5 +158,5 @@ class Crawler:
     
 
 if __name__ == "__main__":
-    crawler = Crawler("page_source.html")
+    crawler = Crawler("page_source.html", db_path="course.db")
     crawler.crawl()

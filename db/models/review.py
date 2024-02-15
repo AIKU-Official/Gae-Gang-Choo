@@ -12,4 +12,5 @@ class Review(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     course_id: Mapped[int] = mapped_column(ForeignKey("course.id"))
     course: Mapped["Course"] = relationship(back_populates="reviews")
+    text: Mapped[str] = mapped_column(String(1000))
 

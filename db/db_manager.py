@@ -3,6 +3,7 @@ from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 
+import json
 from typing import List
 
 from .models import Base
@@ -33,8 +34,25 @@ class DBMananger():
             course.reviews = reviews
             course.review_stat = review_stat
             session.commit()
-        
 
-if __name__ == "__main__":
-    db_manager = DBMananger("course.db", init_db=True)
-    print(db_manager.read_courses())
+    def convert_to_json(self):
+        with Session(self.engine) as session:
+            courses = session.scalars(select(Course)).all()
+            courses_dict = []
+            for course in courses:
+                course_dict = course.as_dict()
+                if course.review_stat:
+                    course_dict["review_stat"] = course.review_stat.as_dict()
+                else:
+                    print(f"{course.course_name} - {course.instructor} does not have review_stat")
+
+                course_dict["reviews"] = []
+                for review in course.reviews:
+                    review_dict = review.as_dict()
+                    course_dict["reviews"].append(review_dict)
+                courses_dict.append(course_dict)
+
+            session.commit()
+
+        courses_json = json.dumps(courses_dict, ensure_ascii=False, indent=4)
+        return courses_json

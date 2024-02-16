@@ -18,5 +18,5 @@ class ReviewStat(Base):
     difficulty: Mapped[float] = mapped_column() # 난이도 (1~5)
     delivery: Mapped[float] = mapped_column() # 강의력 (1~5)
     achievement: Mapped[float] = mapped_column() # 성취감 (1~5)
-    grade: Mapped[float] = mapped_column() # 학점 (1~5)
-    attendance: Mapped[float] = mapped_column() # 출석 (1~5)
+    grade: Mapped[float] = mapped_column() # 학점 (1~5) - 1: 기대이하, 3: 보통, 5: 기대이상
+    attendance: Mapped[float] = mapped_column() # 출석 (1~5) - 1: 아예안함, 5: 매번함

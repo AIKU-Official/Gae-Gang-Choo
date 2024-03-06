@@ -1,0 +1,2 @@
+from .pipeline import CourseRecommendationPipeline
+from .pipeline import CourseRecommendationOutput

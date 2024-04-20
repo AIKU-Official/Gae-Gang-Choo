@@ -1,12 +1,15 @@
-from langchain_openai import ChatOpenAI
 from langchain.prompts.prompt import PromptTemplate
+from langchain_openai import ChatOpenAI
+
 
 class ChatBot:
     def __init__(
         self,
-        pretrained_model_name = "gpt-3.5-turbo",
-        ):
-        self.model = ChatOpenAI(model_name = 'gpt-3.5-turbo', temperature=0.1, max_tokens = 2048)
+        pretrained_model_name="gpt-3.5-turbo",
+    ):
+        self.model = ChatOpenAI(
+            model_name=pretrained_model_name, temperature=0.1, max_tokens=2048
+        )
         self.history = ""
 
         self.template = """너는 수업 개요와 강의평이 주어지면 사용자의 요구사항에 맞게 질문에 답해주는 대화형 AI야.
@@ -23,15 +26,18 @@ class ChatBot:
         답변:
         """
         self.prompt = PromptTemplate(
-            input_variables=["info", "review", "history", "input"], template=self.template
+            input_variables=["info", "review", "history", "input"],
+            template=self.template,
         )
 
     def summarize(self, info, review, query):
-        input = f'''조건: {query}
+        input = f"""조건: {query}
         수업 개요와 강의평을 요약해서 이 강의가 조건에 적합한 강의인지 알려주세요.
         조건에 대한 내용만 포함해서 요약하는 것이 중요합니다.
-        '''
-        prompt_filled = self.prompt.format(info=info, review=review, history=self.history, input=input)
+        """
+        prompt_filled = self.prompt.format(
+            info=info, review=review, history=self.history, input=input
+        )
 
         ans = self.model.invoke(prompt_filled)
 
@@ -41,7 +47,9 @@ class ChatBot:
         return ans.content
 
     def chat(self, info, review, query):
-        prompt_filled = self.prompt.format(info=info, review=review, history=self.history, input=query)
+        prompt_filled = self.prompt.format(
+            info=info, review=review, history=self.history, input=query
+        )
 
         ans = self.model.invoke(prompt_filled)
 

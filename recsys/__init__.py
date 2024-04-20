@@ -1,2 +1,1 @@
-from .pipeline import CourseRecommendationPipeline
-from .pipeline import CourseRecommendationOutput
+from recsys.pipeline import CourseRecommendationOutput, CourseRecommendationPipeline

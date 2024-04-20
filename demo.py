@@ -1,16 +1,11 @@
 import gradio as gr
-import chromadb
-
-import random
-import time
-from typing import Dict
 
 from recsys import CourseRecommendationPipeline
 from agent import ChatBot
 
 recommender = CourseRecommendationPipeline(db_path="./vector_db")
 print("Recommender initialized successfully")
-bot = ChatBot()
+bot = ChatBot(pretrained_model_name="gpt-4-0125-preview")
 best_reviews = ""
 NUM_RESULTS = 5  # align with the number of recommendations
 
@@ -83,10 +78,10 @@ with gr.Blocks() as app:
         global best_course
         best_course = output[0]
         best_reviews = "\n".join(best_course["review"])
+        bot.history = ""
         summarized_text = bot.summarize(
             info=best_course["info"], review=best_reviews, query=query
         )
-        print(summarized_text)
         output_components = []
         for i in range(NUM_RESULTS):
             course_output = output[i]
@@ -119,4 +114,4 @@ with gr.Blocks() as app:
     )
 
 
-app.launch()
+app.launch(share=True)

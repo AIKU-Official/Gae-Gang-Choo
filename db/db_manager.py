@@ -1,19 +1,15 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import Session
-from sqlalchemy import select
-
 import json
 from typing import List
 
-from .models import Base
-from .models import Course
-from .models import ReviewStat
-from .models import Review
+from sqlalchemy import create_engine, select
+from sqlalchemy.orm import Session
 
-class DBMananger():
+from db.models import Base, Course
+
+
+class DBMananger:
     def __init__(self, db_path: str, init_db: bool = False):
-        self.engine = create_engine(f'sqlite:///{db_path}')
+        self.engine = create_engine(f"sqlite:///{db_path}")
 
         self.base = Base()
         if init_db:
@@ -27,7 +23,7 @@ class DBMananger():
     def read_courses(self):
         with Session(self.engine) as session:
             return session.scalars(select(Course)).all()
-        
+
     def add_review_to_course(self, course, reviews, review_stat):
         with Session(self.engine) as session:
             course = session.get(Course, course.id)
@@ -44,7 +40,9 @@ class DBMananger():
                 if course.review_stat:
                     course_dict["review_stat"] = course.review_stat.as_dict()
                 else:
-                    print(f"{course.course_name} - {course.instructor} does not have review_stat")
+                    print(
+                        f"{course.course_name} - {course.instructor} does not have review_stat"
+                    )
 
                 course_dict["reviews"] = []
                 for review in course.reviews:

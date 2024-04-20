@@ -1,3 +1,8 @@
+# DB
+*.json
+*.db
+
+
 # DS_STORE
 .DS_Store
 ._.DS_Store

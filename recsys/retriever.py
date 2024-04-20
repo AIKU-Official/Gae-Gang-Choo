@@ -31,7 +31,6 @@ class ReciprocalRetriever:
         course_ids = [
             list(map(lambda x: x["course_id"], i)) for i in result["metadatas"]
         ]
-        unique_course_ids = set(sum(course_ids, []))
         ids = result["ids"]
         relevances = result["distances"]
 

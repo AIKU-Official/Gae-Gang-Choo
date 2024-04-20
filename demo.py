@@ -3,7 +3,7 @@ import gradio as gr
 from recsys import CourseRecommendationPipeline
 from agent import ChatBot
 
-recommender = CourseRecommendationPipeline(db_path="./vector_db")
+recommender = CourseRecommendationPipeline(db_path="./vector_db/chroma")
 print("Recommender initialized successfully")
 bot = ChatBot(pretrained_model_name="gpt-4-0125-preview")
 best_reviews = ""
@@ -44,7 +44,7 @@ with gr.Blocks() as app:
                     with gr.Row():
                         course_name = gr.Textbox(label="강의명")
                         instructor = gr.Textbox(label="교수자")
-                        
+
                     with gr.Row():
                         timeslot = gr.Textbox(label="시간대")
                         room = gr.Textbox(label="강의실")
@@ -87,7 +87,10 @@ with gr.Blocks() as app:
             course_output = output[i]
             output_components += [
                 gr.Tab(visible=True),
-                gr.Textbox(f'{course_output["course_no"]}-{course_output["course_class"]}', label="학수번호/분반"),
+                gr.Textbox(
+                    f'{course_output["course_no"]}-{course_output["course_class"]}',
+                    label="학수번호/분반",
+                ),
                 gr.Textbox(course_output["department"], label="학과"),
                 gr.Textbox(course_output["course_type"], label="이수구분"),
                 gr.Textbox(course_output["course_name"], label="강의명"),
@@ -105,7 +108,6 @@ with gr.Blocks() as app:
         output_components.append(gr.Textbox(summarized_text, label="Summary"))
         output_components.append(gr.Row(visible=True))
         return output_components
-
 
     submit_button.click(
         fn=on_submit,

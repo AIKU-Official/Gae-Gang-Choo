@@ -5,7 +5,7 @@ from chromadb.config import Settings
 from kss import split_sentences
 from utils import extract_prefix, preprocess_text, remove_prefix
 
-from vector_db.embed_generator import EmbedGenerator
+from embed_generator import EmbedGenerator
 
 
 class VectorDBGenerator:
@@ -123,7 +123,7 @@ class VectorDBGenerator:
         )
 
         # Review sentences
-        self.client.delete_collection(name="review_sentences")
+        # self.client.delete_collection(name="review_sentences")
         review_sentence_df = review_df
         review_sentence_df["reviews"] = review_sentence_df["reviews"].map(
             split_sentences

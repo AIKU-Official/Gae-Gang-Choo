@@ -5,7 +5,7 @@ from typing import Dict, List
 
 import chromadb
 
-from recsys.embed_generator import EmbedGenerator
+from vector_db.embed_generator import EmbedGenerator
 from recsys.query_splitter import QuerySplitterOpenAI
 from recsys.retriever import ReciprocalRetriever
 

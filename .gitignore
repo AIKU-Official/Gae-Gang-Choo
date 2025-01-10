@@ -1,7 +1,7 @@
 # DB
 *.json
 *.db
-
+vector_db/chroma/
 
 # DS_STORE
 .DS_Store
